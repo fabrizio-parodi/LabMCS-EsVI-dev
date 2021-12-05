@@ -1,22 +1,55 @@
-
 \begin{frame}[fragile]
-  \frametitle{Strumenti per l'acquisizione dati}
+  \frametitle{Acquisizione dati}
+  Acquisiremo il/i multimetro/i e l'alimentatore in python
   \begin{itemize}
-  \item \`E fornito un modulo python per la lettura dal multimetro (valido per tensione, corrente e resistenza). Esempio di uso:
-    \begin{lstlisting}
-#!/usr/bin/python
-import sys, serial
-from dmm import *
-ser     = serial.Serial("/dev/ttyUSB0", 9600)
-val,err = dmmread(ser)
-    \end{lstlisting}
-  \item completare aggiungendo loop, inserimento manuale di V del generatore (se necessario) e output su file.
+  \item l'acquisizione data si svolger\`a in ambiente Windows
+    (aprire il command line di Windows) con python3; createvi ad esempio una cartella
+    \begin{verbatim}
+    C:/Users/stud02/LabMCS-EsVI 
+\end{verbatim}
+    \vskip -0.1cm
+    (da questa cartella invierete lo script di acquisizione).
+  \item l'editing dello script di acquisizione e analisi dati avverr\`a in ambiente WSL (lo stesso che avete sul vostro PC)  nella cartella di cui sopra, accedendovi come:
+    \begin{verbatim}
+    /mnt/c/Users/stud02/LabMCS-EsVI
+    \end{verbatim}
   \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Strumenti per l'acquisizione dati}
-  Cosa c'\`e dentro {\tt dmm.py} ?
+  \frametitle{Lettura del multimetro}
+  \begin{center}
+     \includegraphics[width=0.5\linewidth]{Tek.jpg}
+  \end{center}
+  \vskip -0.2cm
+  I comandi accettati (tra gli altri sono)
+  \begin{itemize}
+  \item {\tt meas1?} effettua la misura (ritornando il valore e il tipo di misura (ADC/VDC/OHMS))
+  \item {\tt range1?} ritorna l'intervallo di misura (utile per stabilire l'errore)
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[fragile]
+  \frametitle{Lettura del multimetro (modulo {\tt serial})}
+  La seriale viene inizializzata con il metodo {\tt Serial} del modulo {\tt serial} a cui bisogna passare (almeno)
+  \begin{itemize}
+  \item il nome del device ("COMX" con X intero, lo trovare cercando i device su Windows)
+  \item la velocit\`a di comunicazione (in bits/sec)
+  \end{itemize}
+  I comandi vengono passati in python dal modulo con le chiamate
+  \begin{itemize}
+    \item {\tt write(..)}
+    \item {\tt readline()}
+  \end{itemize}
+  entrambe vogliono in input bytes-array. \\ Quindi a {\tt write} occorre passare {\tt b'comando'}
+  e il valore di ritorno di readline deve essere convertito in string con il metodo {\tt decode}.
+  
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Modulo per il multimetro: {\tt dmm.py}}
+Abbiamo creato un modulo {\tt dmm} per facilitare la lettura del multimetro.
 \begin{python}
 #!/usr/bin/python
 import time
@@ -46,7 +79,7 @@ def dmmread(ser):
 \end{frame}
 
   \begin{frame}[fragile]
-  \frametitle{Strumenti per l'acquisizione dati}
+  \frametitle{Modulo per il multimetro: {\tt dmm.py} (II)}
 
   %  \begin{lstlisting}
   Calcolo dell'errore (essenzialmente trascrittura del manuale dello strumento).
@@ -70,4 +103,90 @@ def dmmread(ser):
 \end{python}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Lettura del multimetro (programma principale)}
+  Esempio d'uso:
+    \begin{lstlisting}
+ #!/usr/bin/python
+ import sys, serial
+ from dmm import *
+ ser     = serial.Serial("COM2", 9600)
+ val,err = dmmread(ser)
+    \end{lstlisting}
+  Da completare aggiungendo loop e output su file.
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Pilotare il generatore}
+  \footnotesize
+  \begin{center}
+     \includegraphics[width=0.5\linewidth]{Rohde.jpg}
+  \end{center}
+  \vskip -0.2cm
+  Per configurare l'accesso occorre usare il modulo {\tt ResourceManager} di {\tt pyvisa}.
+  Quindi i comandi da dare sono:
+  \begin{itemize}
+    \item  {\tt "INST: NSEL N"}, seleziona il canale N (ce ne sono 2)
+    \item  {\tt "INST: OUTN"},   seleziona il canale N in output
+    \item  {\tt "OUTP ON"},      abilita l'output del generatore
+    \item  {\tt "APPLY V,maxA"}, setta il canale precedentemente selezionato alla tensione V con limite massimo di corrente pari maxA
+  \end{itemize}
+  L'unico comando da usare in python \`e {\tt write} (poich\'e il generatore \`e molto stabile e preciso e quindi assumiamo il valore settato con errore trascurabile).\\
+  Tuttavia, siccome \`e pratico comporre la stringa con il valore di tensione che vogliamo, \`e utile sapere che per inserire un valore numerico in una stringa si usa il prefisso f (float):
+\begin{verbatim}
+   f'Comando {valore}'
+\end{verbatim}
+  la stringa che si forma \`e composta dalla stringa alfanumerica pi\`u il valore di val, inserito dove ci sono le parentesi graffe.
+\end{frame}
+  
+
+\begin{frame}[fragile]
+  \frametitle{Modulo per il generatore: {\tt ps.py}}
+\begin{python}
+#!/usr/bin/python
+
+from   pyvisa import ResourceManager
+
+def init:
+    rm = ResourceManager()
+    instr = rm.open_resource("USB0::0x0AAD::0x0135::035375056::INSTR")
+    return instr
+
+def sel(instr,ch):
+    instsel = f"INST: NSEL {ch}"
+    instout = f"INST OUT{ch}"
+    instr.write(instsel)
+    instr.write(instout)
+    instr.write("OUTP ON")
+
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Uso del modulo {\tt ps.py}}
+\begin{python}
+#!/usr/bin/python
+
+from ps import init,sel
+
+instr = ps.init()
+ps.sel(instr,1)
+valV = 12
+cmd = f"APPLY {valV},0.1"
+instr.write(cmd)
+
+\end{python}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Misura del tempo}
+  La misura del tempo pu\`o rendersi necessaria (ad esempio nell'esperienza dei led con RC).\\
+  Il modulo time contiene un metodo {\tt time} che serve allo scopo:
+  \begin{itemize}
+  \item {\tt time()} ritorna il tempo (in secondi) da un'epoca fissata.\\
+    Su Linux/Unix/Windows l'epoca \`e il 1 Gennaio, 1970, 00:00:00.\\
+    Per praticit\`a \`e utile calcolare i tempi come differenze di tempo rispetto ad un tempi iniziale.
+  \end{itemize}
+  
+\end{frame}
 \end{document}
