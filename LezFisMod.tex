@@ -1,0 +1,108 @@
+\documentclass[10pt]{beamer}
+\usetheme{CambridgeUS}
+\usepackage{amsmath,amssymb}
+\usepackage{color}
+
+%\definecolor{listinggray}{gray}{0.9}
+%\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\definecolor{lcom}{rgb}{0.9,0.4,0.2}
+
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\input{symbols.tex}
+
+\usepackage{listings}
+
+\usepackage{mdframed}
+\usepackage{lipsum} % for creating dummy text
+
+
+
+\lstset{
+    backgroundcolor=\color{lbcolor},
+    tabsize=4,
+    language=C++,
+    captionpos=b,
+    tabsize=3,
+    frame=lines,
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=4pt,
+    breaklines=true,
+    showstringspaces=false,
+    basicstyle=\footnotesize,
+%  identifierstyle=\color{magenta},
+    keywordstyle=\color[rgb]{0,0,1},
+    commentstyle=\color{lcom},
+    stringstyle=\color{red}
+  }
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\scriptsize,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\scriptsize\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\scriptsize\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+frame=tb,                         % Any extra options here
+showstringspaces=false            % 
+}}
+
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+\mdfdefinestyle{def}{
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=20pt,
+    innerleftmargin=20pt,
+    backgroundcolor=gray!20!white
+}
+\newcommand{\prompt}[2]{
+\begin{mdframed}[style=def]
+{\color{red}
+\texttt
+#1
+}
+\vskip 0.1cm
+{\texttt
+#2
+}
+\end{mdframed}
+}
+
+%\usepackage{listings}
+%\lstloadlanguages{C++}
+
+\begin{document}
+
+\title{Misura di costanti fisiche fondamentali}
+\subtitle{Laboratorio di Metodi Computazionali e Statistici (2020/2021)}
+\author[Roberta Cardinale, Fabrizio Parodi]{R.C.,F.P.}
+\institute[Dipartimenti di Fisica]{DIFI}
+\date{\today}
+
+
+\begin{document}
+
+\begin{frame} 
+\titlepage
+\end{frame}
+
+
+\input part1.tex
+\input part2.tex
+
+\end{document}

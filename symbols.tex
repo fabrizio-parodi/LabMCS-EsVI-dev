@@ -1,0 +1,838 @@
+%%%%
+%%%%%
+%%%%% To define, generally, commands working in math-mode and not:
+%%%%% \newcommand {     }      {\ifmmode {\;    } \else $    $ \fi}
+%%%%% \newcommand {\defcom}[1] {\ifmmode {\;#1  } \else ${#1}$ \fi}
+%%%%% The same thing can be done, since LATEX2e, using the command :
+%%%%% \ensuremath{math code} 
+%%%%%
+%%%%% WARNING: don't change a single character in the definitions below !!!!!
+%%%%% WARNING: don't change a single character in the definitions below !!!!!
+%%%%% WARNING: don't change a single character in the definitions below !!!!!
+%%%%%
+%%%%%
+%------------------------------------------------------------------------------
+%%%%% Nella definizione, a secondo membro, 
+%%%%% devi usare la doppia parentesi graffa esternamente 
+%%%%% per evitare che certe definizioni di fonts restino appese nel seguito
+%%%%% ....
+
+%------------------------------------------------------------------------------
+%       DEFINIZIONI GENERALI
+%------------------------------------------------------------------------------
+
+\newcommand {\TBC}{\textbf{\textsf{(ToBeConfirmed)}}}
+\newcommand {\TBD}{\textbf{\textsf{(ToBeDefined)}}}
+\newcommand {\TBW}{\textbf{\textsf{(ToBeWritten)}}}
+\newcommand {\TBE}{\textbf{\textsf{(ToBeExpanded)}}}
+\newcommand {\TBU}{\textbf{\textsf{(ToBeUpdated)}}}
+
+\newcommand{\ensm}      {\ensuremath}
+\newcommand{\xs}        {\xspace}
+\newcommand{\chk}       {\ensm{\spadesuit\text{\bf \ CHECK \ }\spadesuit}\xs}
+\newcommand{\expand}    {\ensm{\spadesuit\text{\bf \ EXPAND \ }\spadesuit}\xs}
+
+%
+%-- The following is for generic symbols
+%-- You can use ensuremath instead !!!!!
+%
+\newcommand {\defcom}[1] {\ifmmode {#1} \else${#1}$\fi}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%-- The following is for units of measure: leave some space in math mode
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand {\defuni}[1] {\ifmmode {\;#1} \else${#1}$ \fi}
+\newcommand {\um}[1]     {\defuni{\mathrm{#1}}}
+%%%%%\newcommand {\um}[1]     {\defuni{\text{#1}}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Scientific notation numbers
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand {\sci}[2]         {\mbox{\ensm{ #1 \! \cdot \! 10^{#2} }}}
+\newcommand {\scix}[1]        {\mbox{\ensm{ 10^{#1} }}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Redefine fraction 
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\afrac}[2]{\,\frac{#1}{#2}\,}
+\newcommand{\acfrac}[2]{\,\cfrac{#1}{#2}\,}
+
+
+
+
+
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% MISC
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\para} {\parallel}
+
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Parentheses
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand {\pton}[1]              {\ensm{\left(  #1 \right)}}
+\newcommand {\pqua}[1]              {\ensm{\left[  #1 \right]}}
+\newcommand {\pgra}[1]              {\ensm{\left\{ #1 \right\}}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Emphasis and comments etc.
+%%%%%-----------------------------------------------------------------------------------------------
+%--!@#$ Nei comandi sotto usa espressioni
+%       del tipo {\sf #1} invece di \textbf{#1}, per farle funzionare !!!!!
+\newcommand {\ignore}[1]   {\ifthenelse{\boolean{ignorefalse}}{{\sf #1}}{ }}
+\newcommand {\comment}[1]  
+{\ifthenelse{\boolean{full}}{{{\bf\sf \mbox{ \relax \\*[0.1mm]} #1\hspace*{\fill} \relax \\*[0.1mm]}}}{ }}
+\newcommand {\ins}[1]      {{\it #1}}
+\newcommand {\xemph}[1]    {\textbf{#1}}
+%------------------------------------------------------------------------------
+\newcommand {\com}[1]   
+	    {\ifthenelse{\boolean{full}}
+            {{	
+		\begin{shadow}
+		  \noindent{{ \sf #1 }}
+		\end{shadow}
+	    }}    
+	    { }} 
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Degree
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\degr}                  {\ensm{^{\circ}}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Average
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\av}[1]                  {\ensm{\langle {#1} \rangle}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Vectors and Tensors in bold
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%%\newcommand {\ve}[1]               {\ensm{\mathbf\!\! #1}}
+%%%%%\newcommand {\ve}[1]               {\ensm{\mathbf #1}}
+%%%%%\newcommand {\ve}[1]               {\ensm{\boldsymbol{#1}}}
+\newcommand {\ve}[1]                {\ensm{\boldsymbol{#1}}}
+\newcommand {\tens}[1]		    {\ensm{\boldsymbol{\mathbbm{#1}}}}
+\newcommand {\matr}[1]              {\ensm{\mathbb{#1}}}
+\newcommand {\Trace}[1]             {\ensm{\text{Tr}[\tens{#1}]}}
+\newcommand {\Det}[1]               {\ensm{\text{Det}\tens{#1}}}
+\newcommand {\diag}[1]              {\ensm{\text{diag}\pgra{#1}}}
+\newcommand {\transposeno}[1]           {\ensm{{#1}^\mathrm{T}}}
+\newcommand {\transpose}[1]             {\transposeno{\tens{#1}}}
+
+
+
+%--------------------------------------------------------------------------------
+%%%%% Delta, Derivatives and differentials
+%%%%% Also defined by the AMS package: amsintsm
+%--------------------------------------------------------------------------------
+%--
+\newif\iftest
+\ifx\diffl\undefined
+%	\newcommand{\diffl}[1]                {\mathinner{d#1}}
+	\newcommand{\diffl}[1]                {\mathinner{d#1}}
+\else
+	\typeout{\diffl already defined}
+\fi
+%--
+\newif\iftest
+\ifx\pdiffl\undefined
+%	\newcommand{\pdiffl}[1]               {\mathinner{\partial#1}}
+	\newcommand{\pdiffl}[1]               {\mathinner{\partial#1}}
+\else
+	\typeout{\pdiffl already defined}
+\fi
+%--
+\newif\iftest
+\ifx\deriv\undefined
+	\newcommand{\deriv}[2]      {\acfrac{\diffl{#1}}{\diffl{#2}}}
+\else
+	\typeout{\deriv already defined}
+\fi
+%--
+\newif\iftest
+\ifx\pderiv\undefined
+  \newcommand{\pderiv}[2]               {\acfrac{\pdiffl{#1}}{\pdiffl{#2}}}
+\else
+	\typeout{\pderiv already defined}
+%%%%%  \renewcommand{\pderiv}[2]             {\acfrac{\pdiffl{#1}}{\pdiffl{#2}}}
+\fi
+
+
+
+
+
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Monadic functions
+%%%%%-----------------------------------------------------------------------------------------------
+
+%\newcommand{\aexp}[1]{\exp{\pqua{#1}}}
+%\newcommand{\asin}[1]{\sin{\pqua{#1}}}
+%\newcommand{\acos}[1]{\cos{\pqua{#1}}}
+
+\let\aexp\exp
+\let\alog\log
+\let\asin\sin
+\let\acos\cos
+\let\atan\tan
+\let\acot\cot
+%\newcommand{\asin}[1]{\sin{\pqua{#1}}}
+%\newcommand{\acos}[1]{\cos{\pqua{#1}}}
+
+
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Scalar product
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\scalarpr}		{\boldsymbol{\cdot}}
+\newcommand{\genscano}[6]	{\ensm{\,{#1}_{#2}^{#3}\!\scalarpr\!{#4}_{#5}^{#6}}}
+\newcommand{\gensca}[6]		{\genscano{\ve{#1}}{#2}{#3}{\ve{#4}}{#5}{#6}}
+\newcommand{\scano}[2]		{\genscano{#1}{}{}{#2}{}{}}
+\newcommand{\sca}[2]            {\gensca{#1}{}{}{#2}{}{}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Generic scalar product BRA-KET
+%%%%%-----------------------------------------------------------------------------------------------
+
+\newcommand{\braket}[2]                  {\ensm{\langle {#1} \lvert {#2} \rangle}}
+
+
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\genscadiffl}[6]	{\genscano{\ve{#1}}{#2}{#3}{\diffl{\ve{#4}}}{#5}{#6}}
+\newcommand{\scadiffl}[2]	{\genscadiffl{#1}{}{}{#2}{}{}}
+
+%%%%% Scalar product of two vectors and a second order tensor
+\newcommand{\scasca}[9]   {\ensm{{#1}_{\!#2}^{#3}\!\!\scalarpr\\!{#4}_{\!#5}^{#6}\!\!\scalarpr\\!{#7}_{\!#8}^{#9}}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Vector product
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%%\newcommand {\vectorpr}      {\wedge}
+\newcommand{\vectopr}		{\boldsymbol{\times}}
+\newcommand{\genvecno}[6]	{\ensm{\,{#1}_{#2}^{#3}\!\vectopr\!{#4}_{#5}^{#6}}}
+\newcommand{\genvec}[6]		{\genvecno{\ve{#1}}{#2}{#3}{\ve{#4}}{#5}{#6}}
+\newcommand{\vecno}[2]		{\genvecno{#1}{}{}{#2}{}{}}
+\renewcommand{\vec}[2]		{\genvec{#1}{}{}{#2}{}{}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Triple Scalar product of three vectors
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand {\triscano}[3]	{\ensm{\scano{#1}{(\vecno{#2}{#3})}}}
+\newcommand {\trisca}[3]	{\triscano{\ve{#1}}{\ve{#2}}{\ve{#3}}}
+\newcommand {\xtriscano}[3]	{\ensm{\scano{(\vecno{#1}{#2})}{#3}}}
+\newcommand {\xtrisca}[3]	{\xtriscano{\ve{#1}}{\ve{#2}}{\ve{#3}}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Triple Vector product of three vectors
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand {\trivecno}[3]      {\ensm{\vecno{#1}{\pton{\vecno{#2}{#3}}}}}
+\newcommand {\trivec}[3]	{\trivecno{\ve{#1}}{\ve{#2}}{\ve{#3}}}
+\newcommand {\trivecnoinv}[3]   {\ensm{\vecno{\pton{\vecno{#1}{#2}}}{#3}}}
+\newcommand {\trivecinv}[3]	{\trivecnoinv{\ve{#1}}{\ve{#2}}{\ve{#3}}}
+
+%%%%%-----------------------------------------------------------------------------------------------
+%%%%% Evaluate
+%%%%%    Notation for an expression evaluated at a particular condition. The
+%%%%%    optional argument can be used to override automatic sizing of the
+%%%%%    right vert bar, e.g. \eval[\biggr]{...}_{...}
+%%%%%-----------------------------------------------------------------------------------------------
+\newcommand{\eval}[2][\right]{\relax\ifx#1\right\relax \left.\fi#2#1\rvert}
+
+%%%%% Absolute value
+\newcommand {\abs}[1]         {\ensm{\left\lvert{#1}\right\rvert}}
+\newcommand {\aabs}[1]        {\ensm{\left\lVert{#1}\right\rVert}}
+\newcommand {\norm}[1]        {\ensm{\left\lVert{#1}\right\rVert}}
+
+%%%%% Unit vector
+%%%%%\newcommand {\vers}[1]        {\ensm{\; \mathrm{vers} \{ \ve{#1} \} }}
+\newcommand {\vers}[1]        {\ensm{\widehat{\ve{#1}} }}
+
+%%%%% Spacing
+\newcommand {\initpar}        {\hspace{6mm}}
+\newcommand {\minispazio}     {\;\;\;}
+\newcommand {\spazio}         {\;\;\;\;\;\;}
+\newcommand {\punto}          {\minispazio .}
+\newcommand {\virgola}        {\minispazio ,}
+\newcommand {\eps}            {\varepsilon}
+
+%%%%% 
+\newcommand {\OK}             {\ensm{\mathbf{OK}}}
+
+
+%%%%% Imaginary unit
+
+
+
+%------------------------------------------------------------------------------
+%-- Useful abbreviations
+%------------------------------------------------------------------------------
+\newcommand{\beq}           {\begin{equation}}
+\newcommand{\eeq}           {\end{equation}}
+\newcommand{\bal}           {\begin{align}}
+\newcommand{\eal}           {\end{align}}
+\newcommand{\bga}           {\begin{gather}}
+\newcommand{\ega}           {\end{gather}}
+\newcommand{\beqx}          {\begin{equation*}}
+\newcommand{\eeqx}          {\end{equation*}}
+\newcommand{\balx}          {\begin{align*}}
+\newcommand{\ealx}          {\end{align*}}
+\newcommand{\bgax}          {\begin{gather*}}
+\newcommand{\egax}          {\end{gather*}}
+\newcommand{\barr}          {\begin{array}}
+\newcommand{\earr}          {\end{array}}
+\newcommand{\beqar}         {\begin{eqnarray}}
+\newcommand{\eeqar}         {\end{eqnarray}}
+\newcommand{\bef}           {\begin{figure}}
+\newcommand{\eef}           {\end{figure}}
+\newcommand{\bit}           {\begin{itemize}}
+\newcommand{\eit}           {\end{itemize}}
+\newcommand{\ben}           {\begin{enumerate}}
+\newcommand{\een}           {\end{enumerate}}
+
+% The following works more or less. But use the AMSSYMB option instead.
+%%%\def\leqsim{\mathbin{\;\raise3pt\hbox{$<$}\kern-15pt\lower3pt\hbox{$\sim$}\;}}
+%%%\def\geqsim{\mathbin{\;\raise3pt\hbox{$>$}\kern-15pt\lower3pt\hbox{$\sim$}\;}}
+
+
+
+
+
+
+
+
+
+
+%------------------------------------------------------------------------------
+%-- Complex numbers
+\newcommand {\cn}[1]   {\ensm{\widehat{#1}}}
+
+
+\newcommand{\derivR}[2]               {\acfrac{\diffl{ {}_R \;    #1}}{\diffl{#2}}}
+\newcommand{\xderiv}[3]               { \left. \acfrac{\diffl{}}{\diffl{#3}} \right\|_{\tt #1}\;{#2}}
+
+\newcommand {\SP}[2]    {       {#1}_\text{\tt #2} }
+\newcommand {\VP}[2]    {  {\ve{#1}}_\text{\tt #2} }
+\newcommand {\TP}[2]    {{\tens{#1}}_\text{\tt #2} }
+
+\newcommand {\SAP}[3]   {       {#1}_\text{\tt #2}^\text{\tt #3}  }
+\newcommand {\VAP}[3]   {  {\ve{#1}}_\text{\tt #2}^\text{\tt #3}  }
+\newcommand {\TAP}[3]   {{\tens{#1}}_\text{\tt #2}^\text{\tt #3}  }
+
+\newcommand {\triad}[3] { \pton{ {#1}\!\cdot\!{#2}\!\cdot\!{#3} } }
+
+\newcommand {\LCM}	{\VAP{L}{CM}{}}
+\newcommand {\TCM}	{\SAP{T}{CM}{}}
+\newcommand {\LS}	{\VAP{L}{S}{}}
+\newcommand {\TS}	{\SAP{T}{S}{}}
+
+\newcommand {\GCMExt}   {\VAP{\Gamma}{CM}{(E)}}
+
+\newcommand {\ICM}	{\tens{I}_\text{\tt CM} \,}
+\newcommand {\IS}	{\tens{I}_\text{\tt S} \,}
+
+\newcommand{\period} {\mathcal{P}}
+\newcommand{\FT}[1]  {\widetilde{#1}}
+
+
+\newcommand{\comp}[2]               {\pqua{#2}_{#1}}
+\newcommand{\bicomp}[3]             {\pqua{#3}_{{#1}{#2}}}
+
+\newcommand{\sqbra}[2]              {\pqua{#1}_{#2}}
+
+\newcommand{\const}      {\text{constant}\xs}
+
+
+%------------------------------------------------------------------------------
+\newcommand {\cc}   {\ensm{\mathcal{C}}}
+\newcommand {\pa}   {\ensm{\mathcal{P}}}
+\newcommand {\qcha}   {\ensm{\mathcal{Q}}}
+\newcommand {\nbar}   {\ensm{\mathcal{B}}}
+\newcommand {\nlep}   {\ensm{\mathcal{L}}}
+\newcommand {\isosz}   {\ensm{\textsf{I}_z}}
+\newcommand {\upppp}   {\ensm{\textsf{U}}}
+\newcommand {\downn}   {\ensm{\textsf{D}}}
+\newcommand {\stran}   {\ensm{\textsf{S}}}
+\newcommand {\charm}   {\ensm{\textsf{C}}}
+\newcommand {\botto}   {\ensm{\textsf{B}}}
+\newcommand {\toppp}   {\ensm{\textsf{T}}}
+
+\newcommand {\NSc}     {\ensm{\SP{N}{S}}}
+\newcommand {\NIn}     {\ensm{\SP{N}{I}}}
+
+
+\newcommand {\dime}[1] {\ensm{\mathrm{\pqua{#1}}}}
+\newcommand {\unit}[1] {\ensm{\mathrm{{#1}_0}}}
+\newcommand {\numb}[1] {\ensm{\mathrm{\widehat{#1}}}}
+
+\newcommand {\ec} {\sci{1.602}{-19}}
+\newcommand {\cs} {  299792458          }
+\newcommand {\hb} {\sci{1.055}{-34}}
+\newcommand {\fine} {\cfrac{1}{137.036}}
+%\newcommand {\hbartimesc} { 197.327 \MeV\cdot\fm }
+\newcommand {\hbarMeVlen} { 197.327 \MeV\cdot\fm }
+\newcommand {\hbarMeVtim} { \sci{6.58212}{-22} \MeV\cdot\s }
+
+\renewcommand {\epsilon} {\varepsilon}
+
+\newcommand {\Kpl}  {\gamma}
+\newcommand {\Grav} {\mathcal{G}}
+
+%%%%%\newcommand {\cond} {\chi}
+\newcommand {\cond} {\sigma}
+
+\newcommand {\suele}  {{\chi_{\tt E}}}
+\newcommand {\suelepri}  {{\chi^\prime_{\tt E}}}
+\newcommand {\suelebar}  {{\bar{\chi}_{\tt E}}}
+\newcommand {\sumag}  {{\chi_{\tt M}}}
+\newcommand {\sumagx} {{\chi_{\tt M}^\star}}
+
+%%%\newcommand {\epr} {{\kappa_{\sss {\tt E}}}}
+%%%\newcommand {\mur} {{\kappa_{\sss {\tt M}}}}
+\newcommand {\epr} {{\kappa_{ {\tt E}}}}
+\newcommand {\eprpri} {{\kappa^\prime_{ {\tt E}}}}
+\newcommand {\eprbar} {{\bar{\kappa}_{ {\tt E}}}}
+\newcommand {\mur} {{\kappa_{ {\tt M}}}}
+
+
+
+\newcommand {\numdens}			{{\rho_{\tt N}}}
+
+\newcommand {\magnchardens}		{{\tilde{\rho}}}
+\newcommand {\surfmagnchardens}		{{\tilde{\rho}_\text{\tt S}}}
+
+\newcommand {\chardens}			{{\rho}}
+\newcommand {\surfchardens}		{{\rho_\text{\tt S}}}
+\newcommand {\currdens}			{{\ve{j}}}
+\newcommand {\surfcurrdens}		{{\ve{j}_\text{\tt S}}}
+\newcommand {\currdensmod}		{{j}}
+\newcommand {\surfcurrdensmod}		{{j_\text{\tt S}}}
+
+\newcommand {\chardensfree}		{{\rho^\text{\tt F}}}
+\newcommand {\surfchardensfree}		{{\rho^\text{\tt F}_\text{\tt S}}}
+\newcommand {\currdensfree}		{{\ve{j}^\text{\tt F}}}
+\newcommand {\surfcurrdensfree}		{{\ve{j}^\text{\tt F}_\text{\tt S}}}
+\newcommand {\currdensfreemod}		{{j^\text{\tt F}}}
+\newcommand {\surfcurrdensfreemod}	{{j^\text{\tt F}_\text{\tt S}}}
+
+\newcommand {\chardenspola}		{{\rho^\text{\tt P}}}
+\newcommand {\surfchardenspola}		{{\rho^\text{\tt P}_\text{\tt S}}}
+\newcommand {\currdenspola}		{{\ve{j}^\text{\tt P}}}
+
+\newcommand {\densmagn}			{{\rho^\text{\tt M}}}
+\newcommand {\surfdensmagn}		{{\rho^\text{\tt M}_\text{\tt S}}}
+\newcommand {\currdensmagn}		{{\ve{j}^\text{\tt M}}}
+\newcommand {\surfcurrdensmagn}		{{\ve{j}^\text{\tt M}_\text{\tt S}}}
+\newcommand {\currdensmagnmod}		{{j^\text{\tt M}}}
+\newcommand {\surfcurrdensmagnmod}	{{j^\text{\tt M}_\text{\tt S}}}
+
+%%%\newcommand {\fem}  {\textepsilon}
+%%%\newcommand {\fem}  {{{\scalefont{4}\upvarepsilon\scalefont{0.25}}}}
+\newcommand {\fem}  {\mathcal{E}}
+
+\newcommand {\BohrM} {\mu_\textrm{B}}
+\newcommand {\NuclM} {\mu_\textrm{N}}
+
+\newcommand {\MM} {\mathcal{M}_0}
+\newcommand {\Avo} {\mathcal{N}_0}
+
+
+\newcommand {\Ael} {\mathcal{A}_\text{E}}
+\newcommand {\Aab} {\mathcal{A}_\text{A}}
+
+
+
+
+
+
+%
+%%%%% Units of measure
+%
+
+% Energy
+\newcommand {\ZeV}                   {\defuni{\mathrm{ZeV}}}
+\newcommand {\EeV}                   {\defuni{\mathrm{EeV}}}
+\newcommand {\PeV}                   {\defuni{\mathrm{PeV}}}
+\newcommand {\TeV}                   {\defuni{\mathrm{TeV}}}
+\newcommand {\GeV}                   {\defuni{\mathrm{GeV}}}
+\newcommand {\MeV}                   {\defuni{\mathrm{MeV}}}
+\newcommand {\keV}                   {\defuni{\mathrm{keV}}}
+\newcommand {\eV}                    {\defuni{\mathrm{eV}}}
+
+\newcommand {\Joule}                 {\defuni{\mathrm{J}}}
+\newcommand {\mJoule}                {\defuni{\mathrm{mJ}}}
+\newcommand {\Btu}                   {\defuni{\mathrm{Btu}}}
+\newcommand {\calor}                 {\defuni{\mathrm{cal}}}
+\newcommand {\erg}                   {\defuni{\mathrm{erg}}}
+
+% Flux
+\newcommand {\flux}                  {\defuni{\mathrm{m^{-2}s^{-1}sr^{-1}}}}
+
+
+% Specific Energy
+\newcommand {\Joulekg}               {\defuni{\mathrm{J/kg}}}
+\newcommand {\calgr}                 {\defuni{\mathrm{cal/g}}}
+\newcommand {\Btulbm}                {\defuni{\mathrm{Btu/lbm}}}
+
+% Mass
+\newcommand {\kg}                    {\defuni{\mathrm{kg}}}
+\newcommand {\gr}                    {\defuni{\mathrm{g}}}
+\newcommand {\lbm}                   {\defuni{\mathrm{lbm}}}
+\newcommand {\uma}                   {\defuni{\mathrm{u}}}
+
+% Mass flow
+\newcommand {\kgs}                   {\defuni{\mathrm{kg/s}}}
+\newcommand {\grs}                   {\defuni{\mathrm{g/s}}}
+\newcommand {\lbms}                  {\defuni{\mathrm{lbm/s}}}
+
+% Volume flow
+%%%%%%%%%%%%%%%%%%\newcommand {\ls}                    {\defuni{\mathrm{l/s}}}
+
+% Cross-section
+\newcommand {\barn}                     {\defuni{\mathrm{b}}}
+\newcommand {\mbarn}                    {\defuni{\mathrm{mb}}}
+\newcommand {\mubarn}                   {\defuni{\mathrm{\mu b}}}
+\newcommand {\nbarn}                    {\defuni{\mathrm{nb}}}
+\newcommand {\nbarninv}                 {\defuni{\mathrm{nb}^{-1}}}
+\newcommand {\pbarn}                    {\defuni{\mathrm{pb}}}
+\newcommand {\pbarninv}                 {\defuni{\mathrm{pb}^{-1}}}
+
+% Luminosity
+\newcommand {\ulum}                  {\defuni{\mathrm{cm^{-2}s^{-1}}}}
+
+% Length - Area - Volume
+\newcommand {\ly}                    {\defuni{\mathrm{ly}}}
+\newcommand {\pc}                    {\defuni{\mathrm{pc}}}
+\newcommand {\kpc}                   {\defuni{\mathrm{kpc}}}
+\newcommand {\Mpc}                   {\defuni{\mathrm{Mpc}}}
+\newcommand {\Gpc}                   {\defuni{\mathrm{Gpc}}}
+\newcommand {\AU}                    {\defuni{\mathrm{AU}}}
+\newcommand {\parsec}                {\defuni{\mathrm{pc}}}
+\newcommand {\km}                    {\defuni{\mathrm{km}}}
+\newcommand {\kmsqu}                 {\defuni{\mathrm{km^2}}}
+\newcommand {\kmcub}                 {\defuni{\mathrm{km^3}}}
+\newcommand {\m}                     {\defuni{\mathrm{m}}}
+\newcommand {\msqu}                  {\defuni{\mathrm{m^2}}}
+\newcommand {\mcub}                  {\defuni{\mathrm{m^3}}}
+\newcommand {\dm}                    {\defuni{\mathrm{dm}}}
+\newcommand {\cm}                    {\defuni{\mathrm{cm}}}
+\newcommand {\cmsqu}                 {\defuni{\mathrm{cm^2}}}
+\newcommand {\cmcub}                 {\defuni{\mathrm{cm^3}}}
+\newcommand {\mm}                    {\defuni{\mathrm{mm}}}
+\newcommand {\mmsqu}                 {\defuni{\mathrm{mm^2}}}
+\newcommand {\mmcub}                 {\defuni{\mathrm{mm^3}}}
+\newcommand {\mum}                   {\defuni{\mu\mathrm{m}}}
+\newcommand {\nm}                    {\defuni{\mathrm{nm}}}
+\newcommand {\fm}                    {\defuni{\mathrm{fm}}}
+\newcommand {\ft}                    {\defuni{\mathrm{ft}}}
+\newcommand {\ftsqu}                 {\defuni{\mathrm{ft^2}}}
+\newcommand {\ftcub}                 {\defuni{\mathrm{ft^3}}}
+\newcommand {\inch}                  {\defuni{\mathrm{in}}}
+\newcommand {\inchsqu}               {\defuni{\mathrm{in^2}}}
+\newcommand {\inchcub}               {\defuni{\mathrm{in^3}}}
+\newcommand {\litri}                 {\defuni{\mathrm{l}}}
+\newcommand {\liter}                 {\defuni{\mathrm{l}}}
+
+% Specific volume
+\newcommand {\ftcublbm}              {\defuni{\mathrm{ft^3/lbm}}}
+\newcommand {\cmcubgr}               {\defuni{\mathrm{cm^3/g}}}
+
+% Density
+\newcommand {\grcmcub}               {\defuni{\mathrm{g/cm^3}}}
+\newcommand {\kgmcub}                {\defuni{\mathrm{kg/m^3}}}
+
+% Time
+\newcommand {\s}                     {\defuni{\mathrm{s}}}
+\newcommand {\mus}                   {\defuni{\mu\mathrm{s}}}
+\newcommand {\ns}                    {\defuni{\mathrm{ns}}}
+\newcommand {\ps}                    {\defuni{\mathrm{ps}}}
+\newcommand {\giorni}                {\defuni{\mathrm{giorni}}}
+\newcommand {\ora}                   {\defuni{\mathrm{ora}}}
+\newcommand {\ore}                   {\defuni{\mathrm{ore}}}
+\newcommand {\hour}                  {\defuni{\mathrm{hour}}}
+\newcommand {\anni}                  {\defuni{\mathrm{anni}}}
+\newcommand {\years}                 {\defuni{\mathrm{yr}}}
+
+% Velocity
+\newcommand {\ms}                    {\defuni{\mathrm{m/s}}}
+\newcommand {\kmh}                   {\defuni{\mathrm{km/h}}}
+\newcommand {\kms}                   {\defuni{\mathrm{km/s}}}
+\newcommand {\fts}                   {\defuni{\mathrm{ft/s}}}
+\newcommand {\nodi}                  {\defuni{\mathrm{nodi}}}
+
+% Acceleration
+\newcommand {\mss}                   {\defuni{\mathrm{m/s^2}}}
+\newcommand {\cmss}                  {\defuni{\mathrm{cm/s^2}}}
+
+% Angular velocity
+\newcommand {\rads}                  {\defuni{\mathrm{rad/s}}}
+\newcommand {\giris}                 {\defuni{\mathrm{giri/s}}}
+\newcommand {\girimin}                 {\defuni{\mathrm{giri/min}}}
+
+% Force
+\newcommand {\Newton}                {\defuni{\mathrm{N}}}
+\newcommand {\ton}                   {\defuni{\mathrm{ton}}}
+\newcommand {\lbf}                   {\defuni{\mathrm{lbf}}}
+
+%Elastic constant
+\newcommand {\Newtonm}                {\defuni{\mathrm{N/m}}}
+\newcommand {\Newtoncm}               {\defuni{\mathrm{N/cm}}}
+
+% Pressure
+\newcommand {\Pa}                    {\defuni{\mathrm{Pa}}}
+\newcommand {\psia}                  {\defuni{\mathrm{psia}}}
+\newcommand {\atm}                   {\defuni{\mathrm{atm}}}
+\newcommand {\mmHg}                  {\defuni{\mathrm{mmHg}}}
+\newcommand {\mbar}                  {\defuni{\mathrm{mbar}}}
+
+% Angles
+\newcommand {\rad}                   {\defuni{\mathrm{rad}}}
+\newcommand {\mrad}                  {\defuni{\mathrm{mrad}}}
+\newcommand {\str}                   {\defuni{\mathrm{sr}}}
+\newcommand {\sr}                    {\defuni{\mathrm{sr}}}
+
+% Magnetic field
+\newcommand {\Tesla}                 {\defuni{\mathrm{T}}}
+\newcommand {\Gauss}                 {\defuni{\mathrm{G}}}
+
+% Quantity of matter
+\newcommand {\mol}                   {\defuni{\mathrm{mol}}}
+\newcommand {\grmol}                 {\defuni{\mathrm{g/mol}}}
+\newcommand {\kgmol}                 {\defuni{\mathrm{kg/mol}}}
+
+% Temperature
+\newcommand {\Cel}                   {\defuni{\!\!\!\mbox{ }^{\circ}\mathrm{C}}}
+\newcommand {\Kel}                   {\defuni{\mathrm{K}}}
+\newcommand {\Far}                   {\defuni{\mbox{ }^{\circ}\mathrm{F}}}
+
+% Entropy
+\newcommand {\JouleKel}              {\defuni{\mathrm{Joule/\Kel}}}
+
+% Frequency
+\newcommand {\GHz}                   {\defuni{\mathrm{GHz}}}
+\newcommand {\MHz}                   {\defuni{\mathrm{MHz}}}
+\newcommand {\kHz}                   {\defuni{\mathrm{kHz}}}
+\newcommand {\Hz}                    {\defuni{\mathrm{Hz}}}
+
+% Voltages
+\newcommand {\kVolt}                 {\defuni{\mathrm{kV}}}
+\newcommand {\Volt}                  {\defuni{\mathrm{V}}}
+\newcommand {\mVolt}                 {\defuni{\mathrm{mV}}}
+
+% Charge
+\newcommand {\C}                     {\defuni{\mathrm{C}}}
+\newcommand {\nC}                    {\defuni{\mathrm{nC}}}
+\newcommand {\pC}                    {\defuni{\mathrm{pC}}}
+\newcommand {\fC}                    {\defuni{\mathrm{fC}}}
+\newcommand {\Ccm}                   {\defuni{\mathrm{C/cm^2}}}
+
+% Capacity
+\newcommand {\muF}                   {\defuni{\mathrm{\mu C}}}
+\newcommand {\pF}                    {\defuni{\mathrm{pC}}}
+\newcommand {\nF}                    {\defuni{\mathrm{nC}}}
+
+
+% Current
+\newcommand {\A}                     {\defuni{\mathrm{A}}}
+\newcommand {\mA}                    {\defuni{\mathrm{mA}}}
+\newcommand {\muA}                   {\defuni{\mu\mathrm{A}}}
+\newcommand {\nA}                    {\defuni{\mathrm{nA}}}
+\newcommand {\pA}                    {\defuni{\mathrm{pA}}}
+\newcommand {\muAcm}                 {\defuni{\mu\mathrm{A/cm^2}}}
+
+
+% Resistence
+\newcommand {\MOhm}                  {\defuni{\mathrm{M\Omega}}}
+\newcommand {\kOhm}                  {\defuni{\mathrm{k\Omega}}}
+\newcommand {\Ohm}                   {\defuni{\mathrm{\Omega}}}
+
+% Power
+\newcommand {\kWatt}                 {\defuni{\mathrm{kW}}}
+\newcommand {\Watt}                  {\defuni{\mathrm{W}}}
+\newcommand {\mWatt}                 {\defuni{\mathrm{mW}}}
+\newcommand {\muWatt}                {\defuni{\mu\mathrm{W}}}
+
+
+\newcommand {\Btus}                  {\defuni{\mathrm{Btu/s}}}
+\newcommand {\hp}                    {\defuni{\mathrm{hp}}}
+
+% Baud rates
+\newcommand {\Mbaud}                 {\defuni{\mathrm{Mbaud}}}
+\newcommand {\Gbaud}                 {\defuni{\mathrm{Gbaud}}}
+
+% Fundamental constants
+\newcommand {\Gravit}                {\defuni{\mathrm{m^3 s^{-2} kg^{-1}}}}
+
+% Cosmic Rays related
+\newcommand {\slde}                  {\defuni{\mathrm{g \cdot cm^{-2}}}}
+\newcommand {\ugrammage}             {\defuni{\mathrm{g/cm^2}}}
+\newcommand {\Xmax}                  {\defuni{\mathrm{X_{\mathrm{MAX}}}}}
+\newcommand {\aper}                  {\defuni{\mathrm{km^2 \cdot sr}}}
+\newcommand {\espo}                  {\defuni{\mathrm{km^2 \cdto sr \cdot yr}}}
+
+% Photometric
+\newcommand {\lumin}                 {\defuni{\mathrm{photons \; m^{-2} \; s^{-1} \; sr^{-1}}}}
+
+
+% Mobilita`
+\newcommand {\umob}                  {{\mathrm{(cm/s)/(V/m)}}}
+
+% Costanti
+\newcommand {\epszero}               {\ensm{\varepsilon_{\sss 0}}}
+\newcommand {\muzero}                {\ensm{\mu_{\sss 0}}}
+%%%%\newcommand {\epsz}                  {{\ensm{\varepsilon_0}}}
+
+\newcommand {\epz}                   \epszero
+\newcommand {\muz}                   \muzero
+
+\newcommand {\kel}                    {\afrac{1}{4 \pi \epz}}
+\newcommand {\kma}                    {\afrac{\muz}{4 \pi}}
+
+
+%-- Arrows
+\newcommand{\arrforw}                {\ensm{\spazio\Longrightarrow\spazio}}
+\newcommand{\arrback}                {\ensm{\spazio\Longleftarrow\spazio}}
+\newcommand{\ifoif}                  {\ensm{\spazio\Leftrightarrow\spazio}}
+\newcommand{\shortifoif}                  {\ensm{\Leftrightarrow}}
+\newcommand{\shortarrforw}           {\ensm{\minispazio\Longrightarrow\minispazio}}
+\newcommand{\shortarrback}           {\ensm{\minispazio\Longleftarrow\minispazio}}
+
+
+%
+%%%%% Chemical symbols
+%
+\newcommand {\COtwo}                {\ensm{\mathrm{CO}_2}\xs}
+\newcommand {\CFfour}               {\ensm{\mathrm{CF}_4}\xs}
+\newcommand {\Cfour}                {\ensm{\mathrm{C}_4\mathrm{F}_{10}}\xs}
+\newcommand {\Cfive}                {\ensm{\mathrm{C}_5\mathrm{F}_{12}}\xs}
+\newcommand {\Csix}                 {\ensm{\mathrm{C}_6\mathrm{F}_{14}}\xs}
+
+%%%%% Special Vectors
+%%%%% Let the blank at the end to leave space after the symbol
+
+\newcommand {\point}[2]                {\ensm{\ve{#1}_\mathrm{#2}}}
+
+
+\newcommand {\eR}                     {\ensm{{\ve{e}}_r}\xs}
+\newcommand {\eT}                     {\ensm{{\ve{e}}_{\theta}}\xs}
+\newcommand {\eTheta}                 {\ensm{{\ve{e}}_{\theta}}\xs}
+
+\newcommand {\eP}                     {\ensm{{\ve{e}}_{\phi}}\xs}
+\newcommand {\ePhi}                   {\ensm{{\ve{e}}_{\phi}}\xs}
+
+\newcommand {\ez}                     {\ensm{{\ve{e}}_{z}}\xs}
+
+%\newcommand {\eA}                     {\ensm{{\ve{e}}_{\phi}}\xs}
+\newcommand {\epar}                   {\ensm{\ve{e}_\parallel}\xs}
+\newcommand {\eper}                   {\ensm{\ve{e}_\perp}\xs}
+
+%\newcommand {\eX}                     {\ensm{\ve{i}}\xs}
+%\newcommand {\eY}                     {\ensm{\ve{j}}\xs}
+%\newcommand {\eZ}                     {\ensm{\ve{k}}\xs}
+
+\newcommand {\eX}                     {\ensm{\ve{e}_1}\xs}
+\newcommand {\eY}                     {\ensm{\ve{e}_2}\xs}
+\newcommand {\eZ}                     {\ensm{\ve{e}_3}\xs}
+\newcommand {\kX}                     {\ensm{\ve{k}_1}\xs}
+\newcommand {\kY}                     {\ensm{\ve{k}_2}\xs}
+\newcommand {\kZ}                     {\ensm{\ve{k}_3}\xs}
+
+%\newcommand {\exx}                     {\ensm{\ve{e}_1}\xs}
+%\newcommand {\eyy}                     {\ensm{\ve{e}_2}\xs}
+%\newcommand {\ezz}                     {\ensm{\ve{e}_3}\xs}
+\newcommand {\exx}                     {\ensm{\ve{i}}\xs}
+\newcommand {\eyy}                     {\ensm{\ve{j}}\xs}
+\newcommand {\ezz}                     {\ensm{\ve{k}}\xs}
+
+
+
+
+\def\ddd{\mathchar'26\mkern-12mud}
+\newcommand{\DD}[1]                   {\ensm{\mathinner{\Delta#1}}}
+\newcommand{\difflsq}[1]              {\mathinner{d^2#1}}
+\newcommand{\threediffl}[1]           {\mathinner{d^3#1}}
+\newcommand{\fourdiffl}[1]            {\mathinner{d^4#1}}
+
+\newcommand{\ndiffl}[1]               {\mathinner{\delta#1}}
+\newcommand{\nderiv}[2]               {\acfrac{\ndiffl{#1}}{\diffl{#2}}}
+
+
+
+\newcommand{\derivsq}[2]              {\acfrac{\difflsq{#1}}{\diffl{#2}^2}}
+\newcommand{\derivsqmix}[3]           {\acfrac{\difflsq{#1}}{\diffl{#2}\diffl{#3}}}
+
+\newcommand{\pdifflsq}[1]             {\mathinner{\partial^2#1}}
+\newcommand{\pderivsq}[2]             {\acfrac{\pdifflsq{#1}}{\pdiffl{#2}^2}}
+\newcommand{\pderivsqmix}[3]          {\acfrac{\pdifflsq{#1}}{\pdiffl{#2}\pdiffl{#3}}}
+\newcommand{\pderivat}[3]             {\pton{\pderiv{#1}{#2}}_{#3}}
+\newcommand{\pderivsqat}[3]           {\pton{\pderivsq{#1}{#2}}_{#3}}
+
+\newcommand{\difflcu}[1]              {\mathinner{d^3#1}}
+\newcommand{\derivcu}[2]              {\acfrac{\difflcu{#1}}{\diffl{#2}^3}}
+
+%\newcommand{\divenovec}[1] {\ensm{\;\mathrm{\textbf{\textsf{div}}}{\,#1}}}
+%\newcommand{\rotonovec}[1] {\ensm{\;\mathrm{\textbf{\textsf{rot}}}{\,#1}}}
+\newcommand{\diveno}[1] {\ensm{\;\mathrm{\textbf{\textsf{div}}}{\,#1}}}
+\newcommand{\rotono}[1] {\ensm{\;\mathrm{\textbf{\textsf{rot}}}{\,#1}}}
+
+\newcommand{\grad}[1]      {\ensm{\;\mathrm{\textbf{\textsf{grad}}}{\,#1}}}
+\newcommand{\xgrad}[2]     {\ensm{\;{\mathrm{\textbf{\textsf{grad}}}}_{#1}     {\,#2}     }}
+%\newcommand{\dive}[1]      {\ensm{\;\mathrm{\textbf{\textsf{div}}}{\ve{\; #1}}}}
+%\newcommand{\roto}[1]      {\ensm{\;\mathrm{\textbf{\textsf{rot}}}{\ve{\; #1}}}}
+\newcommand{\dive}[1]      {\diveno{\ve{#1}}}
+\newcommand{\roto}[1]      {\rotono{\ve{#1}}}
+\newcommand{\nablaop}[1]   {\ensm{\;\mathrm{\boldsymbol{\nabla}}}}
+\newcommand{\lapl}[1]      {\ensm{\;\nabla^2{\, #1}}}
+
+\newcommand{\laplvno}[1]   {\ensm{\;\mathrm{\boldsymbol{\nabla^2}}{\ve{#1}}}}
+\newcommand{\laplv}[1]     {\laplvno{\ve{#1}}}
+
+%%%%%\newcommand{\wave}[1]      {\ensm{\;\Box{\, #1}}}
+\newcommand{\wave}[1]      {\ensm{\;\square \, #1}}
+\newcommand{\divesupnovec}[1] {\ensm{\;\mathrm{\textbf{\textsf{div$_\mathrm{S}$}}}{\,#1}}}
+
+
+%%%%% Order of magnitude
+\newcommand{\Ord}[1]                  {\ensm{{\cal O}(\mathrm{#1})}}
+\newcommand{\ord}[2]                  {\ensm{{\cal O}\mathrm{rd}\pton{#1}^{#2}}}
+
+%%%%% Integral sign
+\newcommand {\integral}[1]               {\int{\negmedspace #1}}
+
+
+%------------------------------------------------------------------------------
+%       HEP SYMBOLS
+%------------------------------------------------------------------------------
+
+
+
+\newcommand {\Zzero}                {\ifmmode {{\mathrm Z}^0} \else ${{\mathrm Z}^0}$ \fi}
+\newcommand {\Higgs}                {\ifmmode {{\mathrm H}^0} \else ${{\mathrm H}^0}$ \fi}
+\newcommand {\W}                    {\ifmmode {{\mathrm W}} \else ${{\mathrm W}}$ \fi}
+\newcommand {\Wpm}                  {\ifmmode {{\mathrm W}^{\pm}} \else ${{\mathrm W}^{\pm}}$ \fi}
+\newcommand {\WW}                   {\ifmmode {{\mathrm W}^+ {\mathrm W}^-} \else ${{\mathrm W}^+ {\mathrm W}^-}$ \fi}
+\newcommand {\Kpm}                  {\ifmmode {{\mathrm K}^{\pm}} \else ${{\mathrm K}^{\pm}}$ \fi}
+
+\newcommand {\MH}                   {\ifmmode {\mathrm{M_H}} \else${\mathrm{M_H}}$ \fi}
+\newcommand {\MHsq}                 {\ifmmode {\mathrm{M_H^2}} \else ${\mathrm{M_H^2}}$ \fi}
+\newcommand {\MW}                   {\ifmmode {\mathrm{M_W}} \else ${\mathrm{M_W}}$ \fi}
+\newcommand {\MWsq}                 {\ifmmode {\mathrm{M_W^2}} \else ${\mathrm{M_W^2}}$ \fi}
+
+\newcommand {\mtau}                 {\ifmmode {\mathrm{m_{\tau}}} \else ${\mathrm{m_{\tau}}}$ \fi}
+\newcommand {\mtop}                 {\ifmmode {\mathrm{m_{top}}} \else ${\mathrm{m_{top}}}$ \fi}
+\newcommand {\mtopsq}               {\ifmmode {\mathrm{m_{top}^2}} \else ${\mathrm{m_{top}^2}}$ \fi}
+\newcommand {\MZ}                   {\ifmmode {\mathrm{M_Z}} \else ${\mathrm{M_Z}}$ \fi}
+\newcommand {\MZsq}                 {\ifmmode {\mathrm{M_Z^2}} \else ${\mathrm{M_Z^2}}$ \fi}
+\newcommand {\MZcube}               {\ifmmode {\mathrm{M_Z^3}} \else ${\mathrm{M_Z^3}}$ \fi}
+
+\newcommand {\Br}                   {\ifmmode {\; \mathrm{Br}} \else ${\mathrm{Br}}$ \fi}
+
+%-----------------------------------------------------------------------------
+%       FISICA
+%-----------------------------------------------------------------------------
+\newcommand {\SdR}           {Reference Frame\xspace}
+\newcommand {\SdC}           {Coordinate System\xspace}
+\newcommand {\LF}            {Laboratory Frame\xspace}
+\newcommand {\RF}            {Rest Frame\xspace}
+%%%%%\newcommand {\SdCs}           {Sistemi di Coordinate\xspace}
+\newcommand {\Warn}          {\Huge\bf Preliminare\xspace}
