@@ -2,10 +2,18 @@
     
 import time
 import serial
+
+def command(ser,string):
+    string = string + "\r\n"
+#    ser.write(bytes(string,"UTF-8"))
+    ser.write(b'ADC\r\n')
+    time.sleep(.5)
+    ser.reset_input_buffer()
+    ser.reset_output_buffer()
     
 def dmmread(ser):
     # Lettura del valore
-    ser.write(b'meas1?\r\n')
+    ser.write(b'val1?\r\n')
     time.sleep(.5)
     line = ser.readline()
     val  = line.decode('ascii').split()
