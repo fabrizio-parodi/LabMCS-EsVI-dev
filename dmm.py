@@ -3,31 +3,28 @@
 import time
 import serial
 
-def command(ser,string):
-    string = string + "\r\n"
-#    ser.write(bytes(string,"UTF-8"))
-    ser.write(b'ADC\r\n')
-    time.sleep(.5)
+def reset(ser):
     ser.reset_input_buffer()
     ser.reset_output_buffer()
+    
+def command(ser,string):
+    string = string + '\r\n'
+    ser.write(string.encode())
+    time.sleep(1)
     
 def dmmread(ser):
     # Lettura del valore
-    ser.write(b'val1?\r\n')
-    time.sleep(.5)
+    command(ser,'val1?')
     line = ser.readline()
     val  = line.decode('ascii').split()
     fval = float(val[0])
-    ser.reset_input_buffer()
-    ser.reset_output_buffer()
+    reset(ser)
     
     # Lettura del range
-    ser.write(b'range1?\r\n')
-    time.sleep(.5)
+    command(ser,'range1?')
     line  = ser.readline()
     ival  = line.decode('ascii').split()
-    ser.reset_input_buffer()
-    ser.reset_output_buffer()
+    reset(ser)
     
     ind = int(ival[0])-1
 
